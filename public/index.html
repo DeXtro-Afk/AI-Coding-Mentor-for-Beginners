@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Coding Mentor | Learn to Code Like Steve!</title>
+  <meta name="description" content="A Minecraft-inspired AI tutor that teaches programming step-by-step with simple explanations, examples, and interactive practice for absolute beginners." />
+
+  <!-- Pixel font from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323:wght@400&display=swap" rel="stylesheet" />
+
+  <!-- Our stylesheet -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- =====================================================
+       LOADING SCREEN
+       Shown while the page and assets are loading
+  ====================================================== -->
+  <div id="loading-screen" class="screen active">
+    <div class="loading-content">
+      <div class="pixel-logo">⛏️</div>
+      <h1 class="loading-title">AI CODING<br/>MENTOR</h1>
+      <div class="loading-bar-container">
+        <div class="loading-bar" id="loading-bar"></div>
+      </div>
+      <p class="loading-text">Loading world...</p>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       MAIN MENU SCREEN
+       The first screen the user sees after loading
+  ====================================================== -->
+  <div id="menu-screen" class="screen">
+    <!-- Floating pixel blocks in background -->
+    <div class="bg-blocks">
+      <div class="bg-block" style="--delay:0s;--x:10%;--color:#5d8a47"></div>
+      <div class="bg-block" style="--delay:1.2s;--x:25%;--color:#7c5c3a"></div>
+      <div class="bg-block" style="--delay:0.5s;--x:45%;--color:#4a6fa5"></div>
+      <div class="bg-block" style="--delay:2s;--x:65%;--color:#5d8a47"></div>
+      <div class="bg-block" style="--delay:1.5s;--x:80%;--color:#888"></div>
+      <div class="bg-block" style="--delay:0.8s;--x:90%;--color:#7c5c3a"></div>
+    </div>
+
+    <div class="menu-container">
+      <!-- Title block -->
+      <div class="title-block">
+        <div class="title-icon">🤖</div>
+        <h1 class="game-title">AI CODING<br/><span class="title-sub">MENTOR</span></h1>
+        <p class="title-tagline">Learn to code — one block at a time!</p>
+      </div>
+
+      <!-- Menu buttons -->
+      <nav class="menu-nav" aria-label="Main Menu">
+        <button id="btn-start" class="mc-button mc-button--green" onclick="showScreen('language-screen')">
+          <span class="btn-icon">▶</span> Start Learning
+        </button>
+        <button id="btn-continue" class="mc-button mc-button--blue" onclick="showScreen('history-screen'); loadHistory()">
+          <span class="btn-icon">📜</span> Past Sessions
+        </button>
+        <button id="btn-about" class="mc-button mc-button--gray" onclick="showScreen('about-screen')">
+          <span class="btn-icon">ℹ</span> How To Use
+        </button>
+      </nav>
+
+      <!-- Version tag -->
+      <div class="version-tag">v1.0 — Powered by Groq AI ⚡</div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       LANGUAGE SELECTION SCREEN
+  ====================================================== -->
+  <div id="language-screen" class="screen">
+    <div class="screen-container">
+      <button class="back-btn" onclick="showScreen('menu-screen')">← Back</button>
+      <h2 class="screen-title">SELECT YOUR LANGUAGE</h2>
+      <p class="screen-subtitle">Choose what you want to learn today!</p>
+
+      <!-- Language grid -->
+      <div class="language-grid">
+        <button class="lang-block lang-python"  onclick="selectLanguage('Python')"     id="lang-python">
+          <span class="lang-icon">🐍</span>
+          <span class="lang-name">Python</span>
+          <span class="lang-desc">Best for beginners!</span>
+        </button>
+        <button class="lang-block lang-js"       onclick="selectLanguage('JavaScript')" id="lang-js">
+          <span class="lang-icon">⚡</span>
+          <span class="lang-name">JavaScript</span>
+          <span class="lang-desc">Web magic!</span>
+        </button>
+        <button class="lang-block lang-java"     onclick="selectLanguage('Java')"        id="lang-java">
+          <span class="lang-icon">☕</span>
+          <span class="lang-name">Java</span>
+          <span class="lang-desc">Minecraft's language!</span>
+        </button>
+        <button class="lang-block lang-c"        onclick="selectLanguage('C')"           id="lang-c">
+          <span class="lang-icon">⚙️</span>
+          <span class="lang-name">C</span>
+          <span class="lang-desc">Super fast!</span>
+        </button>
+        <button class="lang-block lang-cpp"      onclick="selectLanguage('C++')"         id="lang-cpp">
+          <span class="lang-icon">🔧</span>
+          <span class="lang-name">C++</span>
+          <span class="lang-desc">Games & apps!</span>
+        </button>
+        <button class="lang-block lang-general"  onclick="selectLanguage('General Programming')" id="lang-general">
+          <span class="lang-icon">🌐</span>
+          <span class="lang-name">General</span>
+          <span class="lang-desc">All topics!</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       CHAT SCREEN — The main learning screen
+  ====================================================== -->
+  <div id="chat-screen" class="screen">
+    <!-- Top HUD bar (like a Minecraft inventory bar) -->
+    <div class="hud-bar">
+      <button class="hud-btn" onclick="showScreen('menu-screen')" title="Main Menu">🏠</button>
+      <div class="hud-info">
+        <span class="hud-session" id="hud-session-label">Session: New</span>
+        <span class="hud-lang" id="hud-lang-label">📚 Python</span>
+      </div>
+      <button class="hud-btn" onclick="changeLanguage()" title="Change Language">🌐</button>
+    </div>
+
+    <!-- Chat inventory panel -->
+    <div class="chat-panel" id="chat-panel">
+      <!-- Messages go here dynamically -->
+      <div class="chat-welcome" id="chat-welcome">
+        <div class="welcome-icon">🤖</div>
+        <p>Welcome, <strong>Coder</strong>! I'm your AI mentor.</p>
+        <p>Ask me anything about <span id="welcome-lang">Python</span>!</p>
+        <p class="welcome-tip">💡 Tip: Try asking <em>"What is a variable?"</em></p>
+      </div>
+    </div>
+
+    <!-- Quick action buttons -->
+    <div class="quick-actions">
+      <button class="quick-btn" id="btn-simpler" onclick="askSimpler()" title="Explain more simply">
+        🔄 Explain Simpler
+      </button>
+      <button class="quick-btn" id="btn-practice" onclick="askPractice()" title="Get a practice problem">
+        📝 Practice Question
+      </button>
+      <button class="quick-btn" id="btn-example" onclick="askExample()" title="Give me an example">
+        💡 Show Example
+      </button>
+    </div>
+
+    <!-- Input area -->
+    <div class="input-area">
+      <div class="input-wrapper">
+        <input
+          type="text"
+          id="chat-input"
+          class="chat-input"
+          placeholder="Type your question here..."
+          maxlength="500"
+          autocomplete="off"
+          aria-label="Chat message input"
+        />
+        <button id="send-btn" class="send-btn" onclick="sendMessage()" aria-label="Send message">
+          SEND ▶
+        </button>
+      </div>
+      <div class="input-hint" id="input-hint">Press Enter to send • Max 500 characters</div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       HISTORY SCREEN — Previous Sessions
+  ====================================================== -->
+  <div id="history-screen" class="screen">
+    <div class="screen-container">
+      <button class="back-btn" onclick="showScreen('menu-screen')">← Back</button>
+      <h2 class="screen-title">📜 PAST SESSIONS</h2>
+      <p class="screen-subtitle">Load a previous learning session</p>
+
+      <div id="history-list" class="history-list">
+        <!-- Sessions will be loaded dynamically -->
+        <div class="history-loading">
+          <div class="pixel-spinner"></div>
+          <p>Loading sessions...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       ABOUT SCREEN — How to Use
+  ====================================================== -->
+  <div id="about-screen" class="screen">
+    <div class="screen-container">
+      <button class="back-btn" onclick="showScreen('menu-screen')">← Back</button>
+      <h2 class="screen-title">ℹ HOW TO USE</h2>
+
+      <div class="about-grid">
+        <div class="about-card">
+          <div class="about-num">01</div>
+          <h3>Pick a Language</h3>
+          <p>Choose which programming language you want to learn from the selection screen.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-num">02</div>
+          <h3>Ask Questions</h3>
+          <p>Type any question! Even "I don't know anything, where do I start?" works perfectly.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-num">03</div>
+          <h3>Use Quick Actions</h3>
+          <p>Use <strong>Explain Simpler</strong> if confused, or <strong>Practice Question</strong> to test yourself.</p>
+        </div>
+        <div class="about-card">
+          <div class="about-num">04</div>
+          <h3>Save Progress</h3>
+          <p>Your chats are saved automatically. Come back anytime via "Past Sessions".</p>
+        </div>
+      </div>
+
+      <div class="about-tips">
+        <h3>💡 Starter Questions to Try:</h3>
+        <ul class="tip-list">
+          <li onclick="openChat('What is a variable?')" tabindex="0">→ "What is a variable?"</li>
+          <li onclick="openChat('How do I write my first program?')" tabindex="0">→ "How do I write my first program?"</li>
+          <li onclick="openChat('Explain loops to me like I am 10')" tabindex="0">→ "Explain loops to me like I am 10"</li>
+          <li onclick="openChat('What is a function and why do I need it?')" tabindex="0">→ "What is a function and why do I need it?"</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       NOTIFICATION TOAST
+  ====================================================== -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <!-- Our JavaScript logic -->
+  <script src="script.js"></script>
+</body>
+</html>

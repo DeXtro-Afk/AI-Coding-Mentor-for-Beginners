@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ai-coding-mentor
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: MONGODB_URI
+        sync: false
+      - key: PORT
+        value: 3000
