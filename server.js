@@ -133,7 +133,7 @@ app.post('/chat', async (req, res) => {
         'Authorization': `Bearer ${process.env.GROQ_API_KEY}`
       },
       body: JSON.stringify({
-        model: "llama-3.1-8b-instant",  // Fast and capable model from Groq (Llama 3 8B)
+        model: "openai/gpt-oss-120b",  // Meta Llama 3.3 70B — active model on Groq (2025)
         messages: [
           // First message is always the system prompt (AI's personality)
           { role: 'system', content: SYSTEM_PROMPT },
